@@ -1,16 +1,12 @@
-# YouTube Pause Auto-Hide
+# YouTube Hide Control On Pause (YT HideControlOnPause) - Chrome Plugin
 
-Makes YouTube controls auto-hide after inactivity even when the video is paused.
+## What it does 🤔
+With this plugin, when a video is paused, YouTube's player controls and dark gradient overlay appear only on hover — just as they do during playback.
 
-## How it works
-- When you pause a YouTube video, the controls overlay (the black bar at the bottom) will auto-hide after 2 seconds of no interaction, just like when playing.
-- Moving the mouse or pressing a key will show the controls again.
+## Why it exists 🧐
+When you are watching a tutorial on YouTube, sometimes you want to pause the video, take a quick screenshot, and keep it in your note-taking app. But the controls and the dark gradient overlay at the bottom is not letting you take a clean screenshot. 😖 😢
 
-## Installation
-1. Copy [manifest.json](cci:7://file:///Users/i506675/GitRepos/personal/chrome-plugin/manifest.json:0:0-0:0) and [content.js](cci:7://file:///Users/i506675/GitRepos/personal/chrome-plugin/content.js:0:0-0:0) into your extension folder.
-2. Go to `chrome://extensions` in your browser.
-3. Enable Developer Mode.
-4. Click "Load unpacked" and select this folder.
+Say goodbye to that frustration! This plugin will hide the controls and the dark gradient overlay during pause - just like it is during playback. 😊 ✨
 
 ## Note
 - Works only on YouTube video pages.

@@ -1,12 +1,12 @@
 {
     "manifest_version": 3,
-    "name": "YouTube Pause Auto-Hide",
+    "name": "YT HideControlOnPause",
     "version": "1.0.0",
-    "description": "Makes YouTube controls auto-hide after inactivity even when the video is paused.",
+    "description": "Youtube Hide Control On Pause. When a video is paused, YouTube's player controls and dark gradient overlay appear only on hover — just as they do during playback.",
     "content_scripts": [
       {
         "matches": ["https://www.youtube.com/*"],
-        "js": ["content.js"],
+        "js": ["yt-hide-control-on-pause.js"],
         "run_at": "document_idle"
       }
     ]
