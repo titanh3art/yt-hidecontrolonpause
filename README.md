@@ -11,3 +11,6 @@ Say goodbye to that frustration! This plugin will hide the controls and the dark
 ## Note
 - Works only on YouTube video pages.
 - No options or permissions required.
+
+## Attribution
+- Icon used: https://www.flaticon.com/free-icon/play_11389477
