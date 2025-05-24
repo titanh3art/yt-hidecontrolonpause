@@ -3,6 +3,8 @@
   "name": "YT HideControlOnPause",
   "version": "1.0.0",
   "description": "[YouTube Hide Control On Pause] Hides the YouTube's player controls and the dark gradient overlay when the video is paused and makes them appear only on mouse hover — just as they do during playback.",
+  "author": "titanh3art",
+  "homepage_url": "https://github.com/titanh3art/yt-hidecontrolonpause",
   "content_scripts": [
     {
       "matches": ["https://www.youtube.com/*"],
