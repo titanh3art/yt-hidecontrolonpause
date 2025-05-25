@@ -3,8 +3,10 @@
 (function () {
   const STYLE_ELEMENT_ID = "yt-hide-control-on-pause";
   const STYLE_ELEMENT_CONTENT = "yt-hide-control-on-pause-hide";
-  const CTRL_CLASS_ID = ".ytp-chrome-bottom";
-  const GRADIENT_CLASS_ID = ".ytp-gradient-bottom";
+  const BOTTOM_CTRL_CLASS_ID = ".ytp-chrome-bottom";
+  const BOTTOM_GRADIENT_CLASS_ID = ".ytp-gradient-bottom";
+  const FULL_SCREEN_TOP_CTRL_CLASS_ID = ".ytp-chrome-top";
+  const FULL_SCREEN_TOP_GRADIENT_CLASS_ID = ".ytp-gradient-bottom";
 
   // Injects a style element for the plugin's hide class
   function injectCSS() {
@@ -24,18 +26,32 @@
 
   // Hides controls and vignette overlay
   function hideControls() {
-    const controls = document.querySelector(CTRL_CLASS_ID);
-    const gradient = document.querySelector(GRADIENT_CLASS_ID);
-    if (controls) controls.classList.add(STYLE_ELEMENT_CONTENT);
-    if (gradient) gradient.classList.add(STYLE_ELEMENT_CONTENT);
+    const bottom_controls = document.querySelector(BOTTOM_CTRL_CLASS_ID);
+    if (bottom_controls) bottom_controls.classList.add(STYLE_ELEMENT_CONTENT);
+
+    const bottom_gradient = document.querySelector(BOTTOM_GRADIENT_CLASS_ID);
+    if (bottom_gradient) bottom_gradient.classList.add(STYLE_ELEMENT_CONTENT);
+
+    const full_screen_top_controls = document.querySelector(FULL_SCREEN_TOP_CTRL_CLASS_ID);
+    if (full_screen_top_controls) full_screen_top_controls.classList.add(STYLE_ELEMENT_CONTENT);
+
+    const full_screen_top_gradient = document.querySelector(FULL_SCREEN_TOP_GRADIENT_CLASS_ID);
+    if (full_screen_top_gradient) full_screen_top_gradient.classList.add(STYLE_ELEMENT_CONTENT);
   }
 
   // Shows controls and vignette overlay
   function showControls() {
-    const controls = document.querySelector(CTRL_CLASS_ID);
-    const gradient = document.querySelector(GRADIENT_CLASS_ID);
-    if (controls) controls.classList.remove(STYLE_ELEMENT_CONTENT);
-    if (gradient) gradient.classList.remove(STYLE_ELEMENT_CONTENT);
+    const bottom_controls = document.querySelector(BOTTOM_CTRL_CLASS_ID);
+    if (bottom_controls) bottom_controls.classList.remove(STYLE_ELEMENT_CONTENT);
+
+    const bottom_gradient = document.querySelector(BOTTOM_GRADIENT_CLASS_ID);
+    if (bottom_gradient) bottom_gradient.classList.remove(STYLE_ELEMENT_CONTENT);
+
+    const full_screen_top_controls = document.querySelector(FULL_SCREEN_TOP_CTRL_CLASS_ID);
+    if (full_screen_top_controls) full_screen_top_controls.classList.remove(STYLE_ELEMENT_CONTENT);
+
+    const full_screen_top_gradient = document.querySelector(FULL_SCREEN_TOP_GRADIENT_CLASS_ID);
+    if (full_screen_top_gradient) full_screen_top_gradient.classList.remove(STYLE_ELEMENT_CONTENT);
   }
 
   /**
