@@ -6,7 +6,7 @@
   const BOTTOM_CTRL_CLASS_ID = ".ytp-chrome-bottom";
   const BOTTOM_GRADIENT_CLASS_ID = ".ytp-gradient-bottom";
   const FULL_SCREEN_TOP_CTRL_CLASS_ID = ".ytp-chrome-top";
-  const FULL_SCREEN_TOP_GRADIENT_CLASS_ID = ".ytp-gradient-bottom";
+  const FULL_SCREEN_TOP_GRADIENT_CLASS_ID = ".ytp-gradient-top";
 
   // Injects a style element for the plugin's hide class
   function injectCSS() {

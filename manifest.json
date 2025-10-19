@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "YouTube Hide Control On Pause",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Hides YouTube controls and overlay when paused; shows them only on hover — same as during playback.",
   "author": "titanh3art",
   "homepage_url": "https://github.com/titanh3art/yt-hidecontrolonpause",
