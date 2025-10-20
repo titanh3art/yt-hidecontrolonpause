@@ -1,19 +1,25 @@
 // Content script
 
-(function () {
-  const STYLE_ELEMENT_ID = "yt-hide-control-on-pause";
-  const STYLE_ELEMENT_CONTENT = "yt-hide-control-on-pause-hide";
-  const BOTTOM_CTRL_CLASS_ID = ".ytp-chrome-bottom";
-  const BOTTOM_GRADIENT_CLASS_ID = ".ytp-gradient-bottom";
-  const FULL_SCREEN_TOP_CTRL_CLASS_ID = ".ytp-chrome-top";
-  const FULL_SCREEN_TOP_GRADIENT_CLASS_ID = ".ytp-gradient-top";
+const PLAYER_ID = "movie_player";
+const STYLE_ELEMENT_ID = "yt-hide-control-on-pause";
+const STYLE_ELEMENT_CONTENT = "yt-hide-control-on-pause-css";
+const BOTTOM_CTRL_CLASS = ".ytp-chrome-bottom";
+const BOTTOM_GRADIENT_CLASS = ".ytp-gradient-bottom";
+const FULL_SCREEN_TOP_CTRL_CLASS = ".ytp-chrome-top";
+const FULL_SCREEN_TOP_GRADIENT_CLASS = ".ytp-gradient-top";
 
-  // Injects a style element for the plugin's hide class
-  function injectCSS() {
-    if (document.getElementById(STYLE_ELEMENT_ID)) return;
-    const style = document.createElement("style");
-    style.id = STYLE_ELEMENT_ID;
-    style.textContent = `
+let bottomCtrl;
+let bottomGradient;
+let fullScreenTopCtrl;
+let fullScreenTopGradient;
+
+/**
+ * Injects a CSS style element
+ */
+function injectCSS() {
+  const style = document.createElement("style");
+  style.id = STYLE_ELEMENT_ID;
+  style.textContent = `
         .${STYLE_ELEMENT_CONTENT} {
           opacity: 0 !important;
           pointer-events: none !important;
@@ -21,74 +27,83 @@
           transition: opacity 0s !important;
         }
       `;
-    document.head.appendChild(style);
+  document.head.appendChild(style);
+}
+
+/**
+ * Event listener callback, hides controls and vignette overlay
+ */
+function hideControls() {
+  bottomCtrl.classList.add(STYLE_ELEMENT_CONTENT);
+  bottomGradient.classList.add(STYLE_ELEMENT_CONTENT);
+  fullScreenTopCtrl.classList.add(STYLE_ELEMENT_CONTENT);
+  fullScreenTopGradient.classList.add(STYLE_ELEMENT_CONTENT);
+}
+
+/**
+ * Event listener callback, shows controls and vignette overlay
+ */
+function showControls() {
+  bottomCtrl.classList.remove(STYLE_ELEMENT_CONTENT);
+  bottomGradient.classList.remove(STYLE_ELEMENT_CONTENT);
+  fullScreenTopCtrl.classList.remove(STYLE_ELEMENT_CONTENT);
+  fullScreenTopGradient.classList.remove(STYLE_ELEMENT_CONTENT);
+}
+
+/**
+ * Registers event listeners for mouse enter and mouse leave events on the video player
+ */
+function setupEventListeners(player) {
+  console.debug("[YT Hide Control On Pause - Extension] setupEventListeners()");
+
+  injectCSS();
+
+  bottomCtrl = document.querySelector(BOTTOM_CTRL_CLASS);
+  bottomGradient = document.querySelector(BOTTOM_GRADIENT_CLASS);
+  if (!bottomCtrl || !bottomGradient) {
+    console.error(
+      "[YT Hide Control On Pause - Extension] Failed to find bottom control and gradient element"
+    );
+    return;
   }
 
-  // Hides controls and vignette overlay
-  function hideControls() {
-    const bottom_controls = document.querySelector(BOTTOM_CTRL_CLASS_ID);
-    if (bottom_controls) bottom_controls.classList.add(STYLE_ELEMENT_CONTENT);
-
-    const bottom_gradient = document.querySelector(BOTTOM_GRADIENT_CLASS_ID);
-    if (bottom_gradient) bottom_gradient.classList.add(STYLE_ELEMENT_CONTENT);
-
-    const full_screen_top_controls = document.querySelector(FULL_SCREEN_TOP_CTRL_CLASS_ID);
-    if (full_screen_top_controls) full_screen_top_controls.classList.add(STYLE_ELEMENT_CONTENT);
-
-    const full_screen_top_gradient = document.querySelector(FULL_SCREEN_TOP_GRADIENT_CLASS_ID);
-    if (full_screen_top_gradient) full_screen_top_gradient.classList.add(STYLE_ELEMENT_CONTENT);
+  fullScreenTopCtrl = document.querySelector(FULL_SCREEN_TOP_CTRL_CLASS);
+  fullScreenTopGradient = document.querySelector(
+    FULL_SCREEN_TOP_GRADIENT_CLASS
+  );
+  if (!fullScreenTopCtrl || !fullScreenTopGradient) {
+    console.warn(
+      "[YT Hide Control On Pause - Extension] Failed to find fullscreen top gradient element"
+    );
   }
 
-  // Shows controls and vignette overlay
-  function showControls() {
-    const bottom_controls = document.querySelector(BOTTOM_CTRL_CLASS_ID);
-    if (bottom_controls) bottom_controls.classList.remove(STYLE_ELEMENT_CONTENT);
+  player.addEventListener("mouseenter", showControls);
+  player.addEventListener("mouseleave", hideControls);
 
-    const bottom_gradient = document.querySelector(BOTTOM_GRADIENT_CLASS_ID);
-    if (bottom_gradient) bottom_gradient.classList.remove(STYLE_ELEMENT_CONTENT);
-
-    const full_screen_top_controls = document.querySelector(FULL_SCREEN_TOP_CTRL_CLASS_ID);
-    if (full_screen_top_controls) full_screen_top_controls.classList.remove(STYLE_ELEMENT_CONTENT);
-
-    const full_screen_top_gradient = document.querySelector(FULL_SCREEN_TOP_GRADIENT_CLASS_ID);
-    if (full_screen_top_gradient) full_screen_top_gradient.classList.remove(STYLE_ELEMENT_CONTENT);
+  // Initial state: hide if mouse is not over player
+  if (!player.matches(":hover")) {
+    hideControls();
+  } else {
+    showControls();
   }
+}
 
-  /**
-   * Sets up the hover show/hide logic for the video controls and vignette.
-   * @param {HTMLVideoElement} video - The video element to attach logic to.
-   */
-  function setup(video) {
-    if (!video) return;
-    injectCSS();
-
-    // Get the main player area
-    const player = document.querySelector(".html5-video-player");
-    if (!player) return;
-
-    // Remove any previous listeners (defensive)
-    player.removeEventListener("mouseenter", showControls);
-    player.removeEventListener("mouseleave", hideControls);
-
-    // Add listeners for instant show/hide
-    player.addEventListener("mouseenter", showControls);
-    player.addEventListener("mouseleave", hideControls);
-
-    // Initial state: hide if mouse is not over player
-    if (!player.matches(":hover")) {
-      hideControls();
-    } else {
-      showControls();
-    }
+function main() {
+  const player = document.getElementById(PLAYER_ID);
+  if (player) {
+    setupEventListeners(player);
+  } else {
+    // wait for the player element to be available
+    const observer = new MutationObserver((mutations, obs) => {
+      console.debug("[YT Hide Control On Pause - Extension] MutationObserver");
+      const player = document.getElementById(PLAYER_ID);
+      if (player) {
+        obs.disconnect();
+        setupEventListeners(player);
+      }
+    });
+    observer.observe(document.body, { childList: true, subtree: true });
   }
+}
 
-  // YouTube is a SPA, so watch for navigation and dynamic video loads
-  const observer = new MutationObserver(() => {
-    const video = document.querySelector("video");
-    if (video) setup(video);
-  });
-  observer.observe(document.body, { childList: true, subtree: true });
-
-  // Initial setup
-  setup(document.querySelector("video"));
-})();
+main();
